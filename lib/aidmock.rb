@@ -63,6 +63,10 @@ module Aidmock
     end
   end
 
+  class ArgumentList
+
+  end
+
   class MethodDescriptor
     attr_accessor :name, :type, :arguments
 
@@ -89,8 +93,9 @@ module Aidmock
                   method = stub.instance_variable_get(:@sym)
                   block = stub.instance_variable_get(:@return_block)
                   result = block ? block.call : nil
+                  arguments = ArgumentList.new
 
-                  mocks << MockDescriptor.new(object, method, result)
+                  mocks << MockDescriptor.new(object, method, result, arguments)
                 end
               end
             end
