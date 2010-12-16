@@ -26,7 +26,7 @@ module Aidmock
     end
 
     def framework
-      ::Aidmock::Frameworks::RSpecMocks
+      ::Aidmock::Frameworks::RSpec
     end
 
     def create_or_update_interface(klass, &block)
@@ -80,11 +80,11 @@ module Aidmock
   module Frameworks
     MockDescriptor = Struct.new(:klass, :method, :result, :arguments)
 
-    module RSpecMocks
+    module RSpec
       class << self
         def mocks
           [].tap do |mocks|
-            RSpec::Mocks.space.send(:mocks).each do |moc|
+            ::RSpec::Mocks.space.send(:mocks).each do |moc|
               proxy = moc.send(:__mock_proxy)
               object = proxy.instance_variable_get(:@object).class
 
