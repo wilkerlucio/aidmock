@@ -18,50 +18,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require "aidmock/interface"
-require "aidmock/method_descriptor"
-require "aidmock/void_class"
-require "aidmock/frameworks"
-
 module Aidmock
-  class << self
-    def interface(klass, &block)
-      interfaces[klass] = create_or_update_interface(klass, &block)
+  class Interface
+    def initialize(klass)
+      @klass = klass
+      @methods = []
     end
 
-    def stub(klass, stubs = {})
+    def method(name, type, *arguments)
+      @methods << MethodDescriptor.new(name, type, *arguments)
     end
 
-    def verify
-      framework.mocks.each do |mock|
-        interface = interfaces[mock.klass]
+    def verify(mock)
+      method = find_method(mock)
 
-        if interface
-          interface.verify(mock)
-        else
-          # TODO: warn no interface defined
-        end
+      if method
+        # TODO: check arguments and return value
+      else
+        raise %Q{Aidmock: method "#{mock.method}" was not defined for "#{mock.klass}" interface}
       end
     end
 
-    protected
-
-    def interfaces
-      @interfaces ||= {}
+    def find_method(mock)
+      @methods.find do |method|
+        method.name == mock.method
+      end
     end
-
-    def framework
-      ::Aidmock::Frameworks::RSpec
-    end
-
-    def create_or_update_interface(klass, &block)
-      interface = interfaces[klass] || Interface.new(klass)
-      interface.instance_eval &block
-      interface
-    end
-  end
-
-  class ArgumentList
-
   end
 end
