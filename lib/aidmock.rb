@@ -77,6 +77,12 @@ module Aidmock
     end
   end
 
+  class VoidClass < BasicObject
+    def method_missing(name, *args, &block)
+      nil
+    end
+  end
+
   module Frameworks
     MockDescriptor = Struct.new(:klass, :method, :result, :arguments)
 
@@ -85,14 +91,13 @@ module Aidmock
         def mocks
           [].tap do |mocks|
             ::RSpec::Mocks.space.send(:mocks).each do |moc|
-              proxy = moc.send(:__mock_proxy)
+              proxy  = moc.send(:__mock_proxy)
               object = proxy.instance_variable_get(:@object).class
 
               proxy.send(:method_doubles).each do |double|
                 (double.expectations + double.stubs).each do |stub|
-                  method = stub.instance_variable_get(:@sym)
-                  block = stub.instance_variable_get(:@return_block)
-                  result = block ? block.call : nil
+                  method    = stub.sym
+                  result    = parse_double_result(stub)
                   arguments = ArgumentList.new
 
                   mocks << MockDescriptor.new(object, method, result, arguments)
@@ -100,6 +105,26 @@ module Aidmock
               end
             end
           end
+        end
+
+        protected
+
+        def parse_double_result(double)
+          block = double.instance_variable_get(:@return_block)
+
+          if block
+            result = call_result_block(block)
+            double.instance_variable_get(:@consecutive) ? result : [result]
+          else
+            []
+          end
+        end
+
+        def call_result_block(block)
+          arity = block.arity
+          params = (1..arity).map { VoidClass.new }
+
+          block.call(*params)
         end
       end
     end
