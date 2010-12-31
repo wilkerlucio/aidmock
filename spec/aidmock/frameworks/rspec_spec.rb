@@ -44,7 +44,7 @@ describe Aidmock::Frameworks::RSpec do
       end
     end
 
-		context "method result" do
+    context "method result" do
       before :each do
         @obj = mock
       end
@@ -74,7 +74,7 @@ describe Aidmock::Frameworks::RSpec do
 
         framework.should have_mock_result([" messed up"])
       end
-		end
+    end
 
     context "method arguments" do
       it "return empty list if has no arguments"
