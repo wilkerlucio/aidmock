@@ -18,10 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require "aidmock/frameworks/rspec"
-
 module Aidmock
   module Frameworks
+    autoload :RSpec, 'aidmock/frameworks/rspec'
+
     MockDescriptor = Struct.new(:klass, :method, :result, :arguments)
   end
 end

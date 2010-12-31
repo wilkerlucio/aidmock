@@ -18,12 +18,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require "aidmock/interface"
-require "aidmock/method_descriptor"
-require "aidmock/void_class"
-require "aidmock/frameworks"
-
 module Aidmock
+  autoload :Interface, 'aidmock/interface'
+  autoload :MethodDescriptor, 'aidmock/method_descriptor'
+  autoload :VoidClass, 'aidmock/void_class'
+  autoload :Frameworks, 'aidmock/frameworks'
+
   class << self
     def interface(klass, &block)
       interfaces[klass] = create_or_update_interface(klass, &block)
