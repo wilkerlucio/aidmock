@@ -21,6 +21,11 @@
 require File.expand_path("../../../spec_helper", __FILE__)
 
 class Sample; end;
+class SampleWithInitializer
+  def initialize(name)
+    @name = name
+  end
+end
 
 describe Aidmock::Frameworks::RSpec do
   framework = Aidmock::Frameworks::RSpec
@@ -162,6 +167,13 @@ describe Aidmock::Frameworks::RSpec do
           result = framework.mocks[0].arguments[0]
           result.should be_an_instance_of(String)
         end
+
+        it "get an object even if object needs an initializer" do
+          @obj.stub(:some_method).with(instance_of(SampleWithInitializer))
+
+          result = framework.mocks[0].arguments[0]
+          result.should be_an_instance_of(SampleWithInitializer)
+        end
       end
 
       context "kind of matcher" do
@@ -170,6 +182,13 @@ describe Aidmock::Frameworks::RSpec do
 
           result = framework.mocks[0].arguments[0]
           result.should be_a_kind_of(String)
+        end
+
+        it "get an object even if object needs an initializer" do
+          @obj.stub(:some_method).with(kind_of(SampleWithInitializer))
+
+          result = framework.mocks[0].arguments[0]
+          result.should be_a_kind_of(SampleWithInitializer)
         end
       end
 

@@ -117,6 +117,31 @@ module Aidmock
         {}
       end
 
+      register_extractor "DuckTypeMatcher" do |matcher|
+        methods = matcher.instance_variable_get(:@methods_to_respond_to)
+        object = Object.new
+        singleton = class << object; self; end
+        singleton.class_eval do
+          methods.each do |method|
+            define_method method do
+              nil
+            end
+          end
+        end
+
+        object
+      end
+
+      register_extractor "InstanceOf" do |matcher|
+        klass = matcher.instance_variable_get(:@klass)
+        klass.allocate
+      end
+
+      register_extractor "KindOf" do |matcher|
+        klass = matcher.instance_variable_get(:@klass)
+        klass.allocate
+      end
+
       register_extractor "EqualityProxy" do |matcher|
         given = matcher.instance_variable_get(:@given)
 
