@@ -77,8 +77,117 @@ describe Aidmock::Frameworks::RSpec do
     end
 
     context "method arguments" do
-      it "return empty list if has no arguments"
-      it "return a list of arguments if they exists"
+      before :each do
+        @obj = mock
+      end
+
+      it "return empty list if has no arguments" do
+        @obj.stub(:some_method)
+
+        args = framework.mocks[0].arguments
+        framework.mocks[0].arguments.should == []
+      end
+
+      it "return a list of arguments if they exists" do
+        @obj.stub(:some_method).with("hi", "dear")
+
+        framework.mocks[0].arguments.should have(2).items
+      end
+
+      context "any arg matcher" do
+        it "get nil as result" do
+          @obj.stub(:some_method).with(anything)
+
+          framework.should have_mock_arguments([nil])
+        end
+      end
+
+      context "no arg matcher" do
+        it "get an empty array" do
+          @obj.stub(:some_method).with(no_args)
+
+          framework.should have_mock_arguments([])
+        end
+      end
+
+      context "boolean matcher" do
+        it "get true as result" do
+          @obj.stub(:some_method).with(boolean)
+
+          framework.should have_mock_arguments([true])
+        end
+      end
+
+      context "hash including matcher" do
+        it "get a hash with key set" do
+          @obj.stub(:some_method).with(hash_including(:foo))
+
+          framework.should have_mock_arguments([{:foo => nil}])
+        end
+
+        it "get a hash with key and value set" do
+          @obj.stub(:some_method).with(hash_including(:foo => "bar"))
+
+          framework.should have_mock_arguments([{:foo => "bar"}])
+        end
+
+        it "get a hash with multiple keys and values" do
+          @obj.stub(:some_method).with(hash_including(:foo, :foo2 => "bar"))
+
+          framework.should have_mock_arguments([{:foo => nil, :foo2 => "bar"}])
+        end
+      end
+
+      context "hash not including matcher" do
+        it "get a blank hash" do
+          @obj.stub(:some_method).with(hash_not_including(:foo))
+
+          framework.should have_mock_arguments([{}])
+        end
+      end
+
+      context "duck type matcher" do
+        it "get a object that responds to duck methods" do
+          @obj.stub(:some_method).with(duck_type(:foo, :bar))
+
+          result = framework.mocks[0].arguments[0]
+          result.should respond_to(:foo, :bar)
+        end
+      end
+
+      context "instance of matcher" do
+        it "get a object that be an instance of that class" do
+          @obj.stub(:some_method).with(instance_of(String))
+
+          result = framework.mocks[0].arguments[0]
+          result.should be_an_instance_of(String)
+        end
+      end
+
+      context "kind of matcher" do
+        it "get a object that be an instance of that class" do
+          @obj.stub(:some_method).with(kind_of(String))
+
+          result = framework.mocks[0].arguments[0]
+          result.should be_a_kind_of(String)
+        end
+      end
+
+      context "equality proxy" do
+        it "get given value" do
+          @obj.stub(:some_method).with("foo")
+
+          framework.should have_mock_arguments(["foo"])
+        end
+      end
+
+      context "regexp matcher" do
+        it "get the regexp" do
+          @obj.stub(:some_method).with(/foo/)
+
+          framework.should have_mock_arguments(["(?-mix:foo)"])
+        end
+      end
     end
   end
 end

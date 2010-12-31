@@ -32,7 +32,7 @@ module Aidmock
                 (double.expectations + double.stubs).each do |stub|
                   method    = stub.sym
                   result    = parse_double_result(stub)
-                  arguments = ArgumentList.new
+                  arguments = parse_double_arguments(stub)
 
                   mocks << MockDescriptor.new(object, method, result, arguments)
                 end
@@ -60,6 +60,71 @@ module Aidmock
 
           block.call(*params)
         end
+
+        def parse_double_arguments(double)
+          args = double.instance_variable_get(:@args_expectation)
+          matchers = args.instance_variable_get(:@matchers)
+
+          (matchers || []).map do |matcher|
+            extract_matcher_value(matcher)
+          end
+        end
+
+        def extract_matcher_value(matcher)
+          kind = matcher.class.name[/.+:(.+)$/, 1]
+          extractor = find_extractor(kind)
+          extractor.call(matcher)
+        end
+
+        def register_extractor(name, &block)
+          @extractors ||= {}
+          @extractors[name] = block
+        end
+
+        def find_extractor(name)
+          extractor = @extractors[name]
+          raise "Can't find extractor for #{name}" unless extractor
+          extractor
+        end
+
+        def extract_value(value)
+          if value.class.name =~ /^RSpec::Mocks::ArgumentMatchers/
+            extract_matcher_value(value)
+          else
+            value
+          end
+        end
+      end
+
+      register_extractor "AnyArgMatcher" do |matcher|
+        nil
+      end
+
+      register_extractor "BooleanMatcher" do |matcher|
+        true
+      end
+
+      register_extractor "HashIncludingMatcher" do |matcher|
+        expected = matcher.instance_variable_get(:@expected)
+
+        expected.inject({}) do |acc, (key, value)|
+          acc[key] = extract_value(value)
+          acc
+        end
+      end
+
+      register_extractor "HashNotIncludingMatcher" do |matcher|
+        {}
+      end
+
+      register_extractor "EqualityProxy" do |matcher|
+        given = matcher.instance_variable_get(:@given)
+
+        extract_value(given)
+      end
+
+      register_extractor "RegexpMatcher" do |matcher|
+        matcher.instance_variable_get(:@regexp).to_s
       end
     end
   end
