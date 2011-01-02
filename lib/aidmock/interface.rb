@@ -33,11 +33,13 @@ module Aidmock
       method = find_method(mock)
 
       if method
-        # TODO: check arguments and return value
+        method.verify(mock)
       else
-        raise %Q{Aidmock: method "#{mock.method}" was not defined for "#{mock.klass}" interface}
+        raise MethodInterfaceNotDefinedError.new(%Q{Aidmock: method "#{mock.method}" was not defined for "#{mock.klass}" interface})
       end
     end
+
+    protected
 
     def find_method(mock)
       @methods.find do |method|

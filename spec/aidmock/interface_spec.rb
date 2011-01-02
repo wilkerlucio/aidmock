@@ -18,48 +18,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'aidmock/errors'
+describe Aidmock::Interface do
+  Interface = Aidmock::Interface
+  MockDescriptor = Aidmock::Frameworks::MockDescriptor
 
-module Aidmock
-  autoload :Interface, 'aidmock/interface'
-  autoload :MethodDescriptor, 'aidmock/method_descriptor'
-  autoload :VoidClass, 'aidmock/void_class'
-  autoload :Frameworks, 'aidmock/frameworks'
-
-  class << self
-    def interface(klass, &block)
-      interfaces[klass] = create_or_update_interface(klass, &block)
-    end
-
-    def stub(klass, stubs = {})
-    end
-
-    def verify
-      framework.mocks.each do |mock|
-        interface = interfaces[mock.klass]
-
-        if interface
-          interface.verify(mock)
-        else
-          # TODO: warn no interface defined
-        end
+  context "verifying mocks" do
+    context "when mock don't matches interface" do
+      before :each do
+        @interface = Interface.new(Object)
       end
-    end
 
-    protected
+      it "raise error if method is not defined" do
+        double = MockDescriptor.new(nil, :bar, nil, [])
 
-    def interfaces
-      @interfaces ||= {}
-    end
+        expect { @interface.verify(double) }.to raise_error(Aidmock::MethodInterfaceNotDefinedError)
+      end
 
-    def framework
-      ::Aidmock::Frameworks::RSpec
-    end
+      it "invoke verify on method descriptor if method is defined" do
+        double = MockDescriptor.new(nil, :bar, "", [])
+        method = mock
+        method.should_receive(:verify).with(double)
 
-    def create_or_update_interface(klass, &block)
-      interface = interfaces[klass] || Interface.new(klass)
-      interface.instance_eval &block
-      interface
+        @interface.stub(:find_method).with(double).and_return(method)
+        @interface.verify(double)
+      end
     end
   end
 end
