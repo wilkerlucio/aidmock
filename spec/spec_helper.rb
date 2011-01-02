@@ -41,3 +41,17 @@ RSpec::Matchers.define :have_mock_arguments do |value|
     "expected the arguments to be #{value}, got #{framework.mocks[0].arguments.inspect}"
   end
 end
+
+RSpec::Matchers.define :matches do |value|
+  match do |matcher|
+    matcher.match? value
+  end
+
+  failure_message_for_should do |matcher|
+    %{expected the matcher #{matcher.class.name} to matches #{value.inspect}}
+  end
+
+  failure_message_for_should_not do |matcher|
+    %{expected the matcher #{matcher.class.name} to don't matches #{value.inspect}}
+  end
+end

@@ -20,17 +20,30 @@
 
 module Aidmock
   module Matchers
-    def self.factory(value)
+    def self.create(value)
+      return AnyMatcher.new(*value) if value.instance_of? ::Array
+      return AnythingMatcher.new if value.nil?
+      return KindOfMatcher.new(value) if value.instance_of? ::Class
+      return DuckTypeMatcher.new(value) if value.instance_of? ::Symbol
+      return HashMatcher.new(value) if value.instance_of? ::Hash
+      return value if value.respond_to? :match?
 
+      raise "Can't create matcher for #{value.inspect}"
     end
 
     class AnyMatcher
       def initialize(*matchers)
-        @matchers = matchers.map { |matcher| ::AidMock::Matchers.factory(matcher) }
+        @matchers = matchers.map { |matcher| ::Aidmock::Matchers.create(matcher) }
       end
 
       def match?(object)
-        @matchers.any { |matcher| matcher.match? object }
+        @matchers.any? { |matcher| matcher.match? object }
+      end
+    end
+
+    class AnythingMatcher
+      def match?(object)
+        true
       end
     end
 
@@ -40,7 +53,8 @@ module Aidmock
       end
 
       def match?(object)
-        @methods.all { |method| object.respond_to? method }
+        return true if object.nil?
+        @methods.all? { |method| object.respond_to? method }
       end
     end
 
@@ -50,6 +64,7 @@ module Aidmock
       end
 
       def match?(object)
+        return true if object.nil?
         object.instance_of? @klass
       end
     end
@@ -60,7 +75,64 @@ module Aidmock
       end
 
       def match?(object)
+        return true if object.nil?
         object.kind_of? @klass
+      end
+    end
+
+    class HashMatcher
+      def initialize(check_hash, strict = false)
+        @hash = {}
+        @strict = strict
+
+        check_hash.each do |key, value|
+          @hash[key] = ::Aidmock::Matchers.create(value)
+        end
+      end
+
+      def match?(object)
+        return true if object.nil?
+        return false unless object.kind_of? Hash
+
+        return false if @strict and (@hash.keys - object.keys).length != 0
+
+        object.each do |key, value|
+          return false unless @hash.has_key? key
+          return false unless @hash[key].match? value
+        end
+
+        true
+      end
+    end
+
+    class NotNilArgMatcher
+      def initialize(matcher)
+        @matcher = ::Aidmock::Matchers.create(matcher)
+      end
+
+      def match?(object)
+        return false if object.nil?
+        @matcher.match? object
+      end
+    end
+
+    class OptionalArgMatcher
+      def initialize(matcher)
+        @matcher = ::Aidmock::Matchers.create(matcher)
+      end
+
+      def match?(object)
+        @matcher.match? object
+      end
+    end
+
+    class SplatArgMatcher
+      def initialize(matcher = nil)
+        @matcher = ::Aidmock::Matchers.create(matcher)
+      end
+
+      def match?(values)
+        values.all? { |value| @matcher.match? value }
       end
     end
   end
