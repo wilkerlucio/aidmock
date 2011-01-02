@@ -35,7 +35,7 @@ module Aidmock
       if method
         method.verify(mock)
       else
-        raise MethodInterfaceNotDefinedError.new(%Q{Aidmock: method "#{mock.method}" was not defined for "#{mock.klass}" interface})
+        raise MethodInterfaceNotDefinedError.new(%Q{Aidmock: method "#{mock.method}" was not defined for "#{mock.object}" interface})
       end
     end
 

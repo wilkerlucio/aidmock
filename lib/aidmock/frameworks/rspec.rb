@@ -26,7 +26,7 @@ module Aidmock
           [].tap do |mocks|
             ::RSpec::Mocks.space.send(:mocks).each do |moc|
               proxy  = moc.send(:__mock_proxy)
-              object = proxy.instance_variable_get(:@object).class
+              object = proxy.instance_variable_get(:@object)
 
               proxy.send(:method_doubles).each do |double|
                 (double.expectations + double.stubs).each do |stub|

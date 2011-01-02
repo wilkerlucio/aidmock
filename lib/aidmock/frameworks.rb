@@ -22,6 +22,6 @@ module Aidmock
   module Frameworks
     autoload :RSpec, 'aidmock/frameworks/rspec'
 
-    MockDescriptor = Struct.new(:klass, :method, :result, :arguments)
+    MockDescriptor = Struct.new(:object, :method, :result, :arguments)
   end
 end

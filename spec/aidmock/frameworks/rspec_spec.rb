@@ -31,12 +31,12 @@ describe Aidmock::Frameworks::RSpec do
   framework = Aidmock::Frameworks::RSpec
 
   context ".mocks" do
-    context "caller class" do
-      it "return the class object" do
+    context "caller object" do
+      it "return the object" do
         obj = Sample.new
         obj.stub(:some_method)
 
-        framework.mocks[0].klass.should == Sample
+        framework.mocks[0].object.should == obj
       end
     end
 

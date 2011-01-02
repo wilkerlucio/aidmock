@@ -37,7 +37,8 @@ module Aidmock
 
     def verify
       framework.mocks.each do |mock|
-        interface = interfaces[mock.klass]
+        klass = mock.object.class
+        interface = interfaces[klass]
 
         if interface
           interface.verify(mock)
