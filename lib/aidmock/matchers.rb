@@ -18,49 +18,50 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'aidmock/errors'
-
 module Aidmock
-  autoload :Interface, 'aidmock/interface'
-  autoload :MethodDescriptor, 'aidmock/method_descriptor'
-  autoload :VoidClass, 'aidmock/void_class'
-  autoload :Frameworks, 'aidmock/frameworks'
-  autoload :Matchers, 'aidmock/matchers'
+  module Matchers
+    def self.factory(value)
 
-  class << self
-    def interface(klass, &block)
-      interfaces[klass] = create_or_update_interface(klass, &block)
     end
 
-    def stub(klass, stubs = {})
-    end
+    class AnyMatcher
+      def initialize(*matchers)
+        @matchers = matchers.map { |matcher| ::AidMock::Matchers.factory(matcher) }
+      end
 
-    def verify
-      framework.mocks.each do |mock|
-        interface = interfaces[mock.klass]
-
-        if interface
-          interface.verify(mock)
-        else
-          # TODO: warn no interface defined
-        end
+      def match?(object)
+        @matchers.any { |matcher| matcher.match? object }
       end
     end
 
-    protected
+    class DuckTypeMatcher
+      def initialize(*methods)
+        @methods = methods
+      end
 
-    def interfaces
-      @interfaces ||= {}
+      def match?(object)
+        @methods.all { |method| object.respond_to? method }
+      end
     end
 
-    def framework
-      ::Aidmock::Frameworks::RSpec
+    class InstanceOfMatcher
+      def initialize(klass)
+        @klass = klass
+      end
+
+      def match?(object)
+        object.instance_of? @klass
+      end
     end
 
-    def create_or_update_interface(klass, &block)
-      interface = interfaces[klass] || Interface.new(klass)
-      interface.instance_eval &block
-      interface
+    class KindOfMatcher
+      def initialize(klass)
+        @klass = klass
+      end
+
+      def match?(object)
+        object.kind_of? @klass
+      end
     end
   end
 end

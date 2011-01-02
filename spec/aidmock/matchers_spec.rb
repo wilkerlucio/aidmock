@@ -18,49 +18,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'aidmock/errors'
+describe Aidmock::Matchers do
+  context "factory matcher by value" do
+    it "use the matcher if one is sent"
+    it "use an AnyMatcher if an array is sent"
+    it "use KindOfMatcher if a class is sent"
+    it "raise error if can't figure a matcher"
+  end
 
-module Aidmock
-  autoload :Interface, 'aidmock/interface'
-  autoload :MethodDescriptor, 'aidmock/method_descriptor'
-  autoload :VoidClass, 'aidmock/void_class'
-  autoload :Frameworks, 'aidmock/frameworks'
-  autoload :Matchers, 'aidmock/matchers'
-
-  class << self
-    def interface(klass, &block)
-      interfaces[klass] = create_or_update_interface(klass, &block)
+  context "matchers" do
+    context "AnyMatcher" do
+      it "pass if any of matchers matches"
+      it "fails if no matcher can match"
     end
 
-    def stub(klass, stubs = {})
+    context "DuckTypeMatcher" do
+      it "pass if object respond to all methods"
+      it "fail if object don't respond to any of methods"
     end
 
-    def verify
-      framework.mocks.each do |mock|
-        interface = interfaces[mock.klass]
-
-        if interface
-          interface.verify(mock)
-        else
-          # TODO: warn no interface defined
-        end
-      end
+    context "InstanceOfMatcher" do
+      it "pass if the object is an instance of given"
+      it "fail if object is not an instance of given"
     end
 
-    protected
-
-    def interfaces
-      @interfaces ||= {}
-    end
-
-    def framework
-      ::Aidmock::Frameworks::RSpec
-    end
-
-    def create_or_update_interface(klass, &block)
-      interface = interfaces[klass] || Interface.new(klass)
-      interface.instance_eval &block
-      interface
+    context "KindOfMatcher" do
+      it "pass if the object is a kind of given"
+      it "fail if the object is not a kind of given"
     end
   end
 end
