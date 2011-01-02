@@ -18,19 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Aidmock
-  class MethodDescriptor
-    attr_accessor :name, :type, :arguments
-
-    def initialize(name, type, *arguments)
-      @name = name
-      @type = type
-      @arguments = arguments
-    end
-
-    def verify(double)
-      # TODO check return type
-      # TODO check arguments
-    end
-  end
+describe Aidmock::MethodDescriptor do
+  it "initiaze with name, type and arguments"
+  it "verify the return value"
+  it "verify the arguments"
 end

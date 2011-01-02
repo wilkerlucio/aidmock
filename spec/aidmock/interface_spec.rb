@@ -44,4 +44,9 @@ describe Aidmock::Interface do
       end
     end
   end
+
+  context "finding the method" do
+    it "find the method defined by exact name"
+    it "find the method defined by and regular expression"
+  end
 end
