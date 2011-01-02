@@ -135,5 +135,23 @@ module Aidmock
         values.all? { |value| @matcher.match? value }
       end
     end
+
+    def optional(value)
+      OptionalArgMatcher.new(value)
+    end
+
+    alias_method :o, :optional
+
+    def splat(value)
+      SplatArgMatcher.new(value)
+    end
+
+    alias_method :s, :splat
+
+    def not_nil(value)
+      NotNilArgMatcher.new(value)
+    end
+
+    alias_method :nn, :not_nil
   end
 end
