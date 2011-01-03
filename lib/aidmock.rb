@@ -19,6 +19,7 @@
 # THE SOFTWARE.
 
 require 'aidmock/errors'
+require 'aidmock/basic_object' unless Kernel.const_defined? :BasicObject
 
 module Aidmock
   autoload :Interface, 'aidmock/interface'

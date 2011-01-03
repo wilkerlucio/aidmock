@@ -19,30 +19,7 @@
 # THE SOFTWARE.
 
 module Aidmock
-  class Interface
-    include Matchers
-
-    attr_reader :klass, :methods
-
-    def initialize(klass)
-      @klass = klass
-      @methods = []
-    end
-
-    def method(name, type, *arguments)
-      method = MethodDescriptor.new(name, type, *arguments)
-      @methods << method
-      method
-    end
-
-    def find_method(mock)
-      @methods.find do |method|
-        if method.name.instance_of? ::Regexp
-          method.name.match mock.method.to_s
-        else
-          method.name == mock.method
-        end
-      end
-    end
+  class BasicObject
+    instance_methods.each { |m| undef_method m unless m =~ /^__/ }
   end
 end

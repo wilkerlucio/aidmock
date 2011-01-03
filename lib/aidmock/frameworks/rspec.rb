@@ -23,22 +23,24 @@ module Aidmock
     module RSpec
       class << self
         def mocks
-          [].tap do |mocks|
-            ::RSpec::Mocks.space.send(:mocks).each do |moc|
-              proxy  = moc.send(:__mock_proxy)
-              object = proxy.instance_variable_get(:@object)
+          mocks = []
 
-              proxy.send(:method_doubles).each do |double|
-                (double.expectations + double.stubs).each do |stub|
-                  method    = stub.sym
-                  result    = parse_double_result(stub)
-                  arguments = parse_double_arguments(stub)
+          ::RSpec::Mocks.space.send(:mocks).each do |moc|
+            proxy  = moc.send(:__mock_proxy)
+            object = proxy.instance_variable_get(:@object)
 
-                  mocks << MockDescriptor.new(object, method, result, arguments)
-                end
+            proxy.send(:method_doubles).each do |double|
+              (double.expectations + double.stubs).each do |stub|
+                method    = stub.sym
+                result    = parse_double_result(stub)
+                arguments = parse_double_arguments(stub)
+
+                mocks << MockDescriptor.new(object, method, result, arguments)
               end
             end
           end
+
+          mocks
         end
 
         protected
