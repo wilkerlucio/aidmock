@@ -37,18 +37,49 @@ module Aidmock
 
     def verify
       framework.mocks.each do |mock|
-        klass = mock.object.class
-        interface = interfaces[klass]
-
-        if interface
-          interface.verify(mock)
-        else
-          # TODO: warn no interface defined
-        end
+        verify_double(mock)
       end
     end
 
     protected
+
+    def verify_double(double)
+      klass = extract_class(double.object)
+      chain = chain_for(klass)
+
+      if chain.length > 0
+        verify_double_on_chain(double, chain)
+      else
+        # TODO: warn no interface defined
+      end
+    end
+
+    def verify_double_on_chain(double, chain)
+      method = find_method_on_chain(double, chain)
+
+      if method
+        method.verify(double)
+      else
+        raise MethodInterfaceNotDefinedError.new(%Q{Aidmock: method "#{double.method}" was not defined for "#{extract_class(double.object)}" interface})
+      end
+    end
+
+    def find_method_on_chain(double, chain)
+      chain.each do |interface|
+        method = interface.find_method(double.method)
+        return method if method
+      end
+
+      nil
+    end
+
+    def chain_for(klass)
+      klass.ancestors.select { |k| interfaces[k] }
+    end
+
+    def extract_class(object)
+      object.instance_of?(Class) ? object : object.class
+    end
 
     def interfaces
       @interfaces ||= {}

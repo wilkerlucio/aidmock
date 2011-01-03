@@ -22,29 +22,6 @@ describe Aidmock::Interface do
   Interface = Aidmock::Interface
   MockDescriptor = Aidmock::Frameworks::MockDescriptor
 
-  context "verifying mocks" do
-    context "when mock don't matches interface" do
-      before :each do
-        @interface = Interface.new(Object)
-      end
-
-      it "raise error if method is not defined" do
-        double = MockDescriptor.new(nil, :bar, nil, [])
-
-        expect { @interface.verify(double) }.to raise_error(Aidmock::MethodInterfaceNotDefinedError)
-      end
-
-      it "invoke verify on method descriptor if method is defined" do
-        double = MockDescriptor.new(nil, :bar, "", [])
-        method = mock
-        method.should_receive(:verify).with(double)
-
-        @interface.stub(:find_method).with(double).and_return(method)
-        @interface.verify(double)
-      end
-    end
-  end
-
   context "finding the method" do
     it "find the method defined by exact name" do
       interface = Interface.new(Object)
