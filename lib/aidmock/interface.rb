@@ -22,13 +22,17 @@ module Aidmock
   class Interface
     include Matchers
 
+    attr_reader :klass, :methods
+
     def initialize(klass)
       @klass = klass
       @methods = []
     end
 
     def method(name, type, *arguments)
-      @methods << MethodDescriptor.new(name, type, *arguments)
+      method = MethodDescriptor.new(name, type, *arguments)
+      @methods << method
+      method
     end
 
     def verify(mock)
@@ -41,11 +45,13 @@ module Aidmock
       end
     end
 
-    protected
-
     def find_method(mock)
       @methods.find do |method|
-        method.name == mock.method
+        if method.name.instance_of? ::Regexp
+          method.name.match mock.method
+        else
+          method.name == mock.method
+        end
       end
     end
   end

@@ -46,7 +46,20 @@ describe Aidmock::Interface do
   end
 
   context "finding the method" do
-    it "find the method defined by exact name"
-    it "find the method defined by and regular expression"
+    it "find the method defined by exact name" do
+      interface = Interface.new(Object)
+      method = interface.method(:some, nil)
+      double = MockDescriptor.new(nil, :some, nil, [])
+
+      interface.find_method(double).should == method
+    end
+
+    it "find the method defined by and regular expression" do
+      interface = Interface.new(Object)
+      method = interface.method(/find_by_.+/, nil)
+      double = MockDescriptor.new(nil, :find_by_name, nil, [])
+
+      interface.find_method(double).should == method
+    end
   end
 end
