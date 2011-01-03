@@ -20,6 +20,8 @@
 
 module Aidmock
   class Interface
+    include Matchers
+
     def initialize(klass)
       @klass = klass
       @methods = []
