@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 describe Aidmock::MethodDescriptor do
-  MockDescriptor = Aidmock::Frameworks::MockDescriptor
+  mock_descriptor = Aidmock::Frameworks::MockDescriptor
   md = Aidmock::MethodDescriptor
   m = Aidmock::Matchers
 
@@ -36,15 +36,15 @@ describe Aidmock::MethodDescriptor do
   end.new
 
   def mock_return(val)
-    MockDescriptor.new(nil, :some, val)
+    Aidmock::Frameworks::MockDescriptor.new(nil, :some, val)
   end
 
   def mock_args(args)
-    MockDescriptor.new(nil, :some, nil, args)
+    Aidmock::Frameworks::MockDescriptor.new(nil, :some, nil, args)
   end
 
   it "verify the arguments and return value" do
-    double = MockDescriptor.new(nil, :method, :result, [:args])
+    double = mock_descriptor.new(nil, :method, :result, [:args])
     desc = md.new(:some, nil)
     desc.should_receive(:verify_arguments).with(double)
     desc.should_receive(:verify_return).with(double)
