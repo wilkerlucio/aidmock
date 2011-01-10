@@ -36,14 +36,19 @@ describe Aidmock::Sanity do
     it "check each method defined on interface" do
       m1 = mock
       m2 = mock
+      m3 = mock
+      m4 = mock
       ca = mock
 
       interface = Aidmock::Interface.allocate
       interface.stub(:methods).and_return([m1, m2])
+      interface.stub(:class_methods).and_return([m3, m4])
       interface.stub(:klass).and_return(ca)
 
       Aidmock::Sanity.should_receive(:sanitize_method).with(ca, m1)
       Aidmock::Sanity.should_receive(:sanitize_method).with(ca, m2)
+      Aidmock::Sanity.should_receive(:sanitize_method).with(ca, m3)
+      Aidmock::Sanity.should_receive(:sanitize_method).with(ca, m4)
 
       Aidmock::Sanity.sanitize_interface(interface)
     end
@@ -52,7 +57,7 @@ describe Aidmock::Sanity do
   context ".sanitize_method" do
     before :each do
       @ca = mock(:allocate => Object)
-      @me = mock(:name => :to_s, :arity => 0)
+      @me = mock(:name => :to_s, :arity => 0, :class_method? => false)
     end
 
     it "verify if method is defined" do

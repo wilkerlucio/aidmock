@@ -28,7 +28,7 @@ module Aidmock
       end
 
       def sanitize_interface(interface)
-        interface.methods.each do |method|
+        (interface.methods + interface.class_methods).each do |method|
           sanitize_method(interface.klass, method)
         end
       end
@@ -40,7 +40,7 @@ module Aidmock
 
       def verify_method_defined(klass, method)
         return if method.name.instance_of? Regexp
-        object = klass.allocate
+        object = method.class_method? ? klass : klass.allocate
 
         unless object.respond_to? method.name
           raise "Aidmock Sanity: method '#{method.name}' is not defined for #{klass}"
@@ -49,13 +49,17 @@ module Aidmock
 
       def verify_method_arity(klass, method)
         return if method.name.instance_of? Regexp
-        object = klass.allocate
+        object = method.class_method? ? klass : klass.allocate
         defined_method = object.method(method.name)
 
         unless method.arity == defined_method.arity
           raise "Aidmock Sanity: method '#{method.name}' of #{klass} mismatch interface arity, #{defined_method.arity} for #{method.arity}"
         end
       end
+
+      protected
+
+
     end
   end
 end

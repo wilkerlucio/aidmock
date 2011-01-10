@@ -22,7 +22,7 @@ module Aidmock
   class Interface
     include Matchers
 
-    attr_reader :klass, :methods
+    attr_reader :klass, :methods, :class_methods
 
     def initialize(klass)
       @klass = klass
