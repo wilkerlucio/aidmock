@@ -105,8 +105,10 @@ describe Aidmock do
 
   context ".class_chain" do
     it "get chain of defined interfaces on a class" do
-      Aidmock.stub!(:interfaces).and_return({String => true, Object => true, Fixnum => true})
-      Aidmock.send(:chain_for, String).should == [String, Object]
+      m1 = mock
+      m2 = mock
+      Aidmock.stub!(:interfaces).and_return({String => m1, Object => m2, Fixnum => true})
+      Aidmock.send(:chain_for, String).should == [m1, m2]
     end
   end
 

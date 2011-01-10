@@ -30,6 +30,9 @@ module Aidmock
   autoload :Sanity, 'aidmock/sanity'
 
   class << self
+    attr_accessor :warn_undefined_interface
+    alias :warn_undefined_interface? :warn_undefined_interface
+
     def interface(klass, &block)
       interfaces[klass] = create_or_update_interface(klass, &block)
     end
@@ -56,7 +59,7 @@ module Aidmock
       if chain.length > 0
         verify_double_on_chain(double, chain)
       else
-        # TODO: warn no interface defined
+        puts "Aidmock Warning: unsafe mocking on class #{klass}, please interface it" if warn_undefined_interface?
       end
     end
 
@@ -80,7 +83,7 @@ module Aidmock
     end
 
     def chain_for(klass)
-      klass.ancestors.select { |k| interfaces[k] }
+      klass.ancestors.select { |k| interfaces[k] }.map { |k| interfaces[k] }
     end
 
     def extract_class(object)
@@ -98,3 +101,5 @@ module Aidmock
     end
   end
 end
+
+Aidmock.warn_undefined_interface = true

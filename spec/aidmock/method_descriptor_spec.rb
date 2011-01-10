@@ -55,13 +55,21 @@ describe Aidmock::MethodDescriptor do
     it "raise error if return value don't match" do
       desc = md.new(:some, falseMatch)
 
-      expect { desc.verify_return(mock_return(nil)) }.to raise_error(Aidmock::MethodInterfaceReturnNotMatchError)
+      expect { desc.verify_return(mock_return([nil])) }.to raise_error(Aidmock::MethodInterfaceReturnNotMatchError)
     end
 
     it "not raise error if return value match" do
       desc = md.new(:some, trueMatch)
 
-      expect { desc.verify_return(mock_return(nil)) }.to_not raise_error
+      expect { desc.verify_return(mock_return([nil])) }.to_not raise_error
+    end
+
+    it "send double value to matcher" do
+      desc = md.new(:some, trueMatch)
+      trueMatch.should_receive(:match?).with("hi").and_return(true)
+      trueMatch.should_receive(:match?).with("ho").and_return(true)
+
+      desc.verify_return(mock_return(["hi", "ho"]))
     end
   end
 

@@ -58,9 +58,11 @@ module Aidmock
       end
     end
 
-    def verify_return(value)
-      unless @type.match?(value)
-        raise Aidmock::MethodInterfaceReturnNotMatchError.new("Return value #{value.inspect} doesn't match with #{@type.inspect}")
+    def verify_return(double)
+      double.result.each do |value|
+        unless @type.match?(value)
+          raise Aidmock::MethodInterfaceReturnNotMatchError.new("Return value #{value.inspect} doesn't match with #{@type.inspect}")
+        end
       end
     end
 
