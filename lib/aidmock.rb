@@ -42,6 +42,10 @@ module Aidmock
       end
     end
 
+    def interfaces
+      @interfaces ||= {}
+    end
+
     protected
 
     def verify_double(double)
@@ -80,10 +84,6 @@ module Aidmock
 
     def extract_class(object)
       object.instance_of?(Class) ? object : object.class
-    end
-
-    def interfaces
-      @interfaces ||= {}
     end
 
     def framework
