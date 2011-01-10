@@ -104,7 +104,8 @@ DSL helper: @any_of(*matchers)@
 Conversion: use an array
 
 Example:
-bc.. method :concat, String, [String, Fixnum]
+
+bc. method :concat, String, [String, Fixnum]
 method :concat, String, any_of(String, Fixnum) # same as above line
 
 h3(#anything_matcher). AnythingMatcher
@@ -115,7 +116,8 @@ DSL Helper: @anything@
 Conversion: use a @nil@
 
 Example:
-bc.. method :puts, nil
+
+bc. method :puts, nil
 method :puts, anything #same as above line
 
 h3(#duck_type_matcher). DuckTypeMatcher
@@ -126,7 +128,8 @@ DSL Helper: @respond_to(*methods)@
 Conversion: use a symbol
 
 Example:
-bc.. method :write, :to_s
+
+bc. method :write, :to_s
 method :write, respond_to(:to_s) # same as above line
 
 h3(#instance_of_matcher). InstanceOfMatcher
@@ -136,7 +139,8 @@ Check if the object is the instance of given class.
 DSL Helper: @instance_of(klass)@
 
 Example:
-bc.. method :to_s, instance_of(String)
+
+bc. method :to_s, instance_of(String)
 
 h3(#kind_of_matcher). KindOfMatcher
 
@@ -146,7 +150,8 @@ DSL Helper: @kind_of(klass)@
 Conversion: use any class
 
 Example:
-bc.. method :find, ActiveRecord::Base
+
+bc. method :find, ActiveRecord::Base
 method :find, kind_of(ActiveRecord::Base) # same as above line
 
 h3(#hash_matcher). HashMatcher
@@ -157,7 +162,8 @@ DSL Helper: @hash_including(hash, strict = false)@
 Conversion: use any hash
 
 Example:
-bc.. method :find, {:conditions => [String, Array], :order => String}
+
+bc. method :find, {:conditions => [String, Array], :order => String}
 method :find, has_including(:conditions => [String, Array], :order => String) # same as above
 method :find, has_including({:conditions => [String, Array], :order => String}, true) # will require to be called with all keys defined
 
@@ -168,7 +174,8 @@ By default, all matchers will accept a @nil@ value, if you want to require the v
 DSL Helper: @not_nil(matcher)@ or @nn(matcher)@
 
 Example:
-bc.. method :name=, nil, nn(String)
+
+bc. method :name=, nil, nn(String)
 method :name=, nil, not_nil(String) # same as above
 
 h3(#optional_arg_matcher). OptionalArgMatcher
@@ -178,7 +185,8 @@ When you want optional arguments, the @OptionalArgMatcher@ will solve it for you
 DSL Helper: @optional(matcher)@ or @o(matcher)@
 
 Example:
-bc.. method :something, nil, o(String)
+
+bc. method :something, nil, o(String)
 method :something, nil, optional(String) # same as above
 
 h3(#splat_arg_matcher). SplatArgMatcher
@@ -188,7 +196,8 @@ When you want to use splat arguments (example: @def thing(*args)@) this matcher 
 DSL Helper: @splat(matcher)@ or @s(matcher)@
 
 Example:
-bc.. method :something, s(nil) # will accept splat with anything(nil will be converted on "AnythingMatcher":#anything_matcher)
+
+bc. method :something, s(nil) # will accept splat with anything(nil will be converted on "AnythingMatcher":#anything_matcher)
 method :something, splat(nil) # same as above
 
 h2. Class Inheritance and Modules
