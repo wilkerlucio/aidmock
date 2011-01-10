@@ -21,6 +21,20 @@
 module Aidmock
   module Sanity
     class << self
+      def sanitize
+        describe "Aidmock Sanity Checks:" do
+          Aidmock.interfaces.each_pair do |klass, interface|
+            context klass.to_s do
+              (interface.methods + interface.class_methods).each do |method|
+                it "have implemented interface for #{method.name}" do
+                  Aidmock::Sanity.sanitize_method(interface.klass, method)
+                end
+              end
+            end
+          end
+        end
+      end
+
       def sanitize_interfaces
         Aidmock.interfaces.each_pair do |klass, interface|
           sanitize_interface(interface)
