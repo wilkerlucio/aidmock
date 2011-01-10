@@ -22,8 +22,7 @@ h2. Configuration
 
 In order to use Aidmock you need to configure it on your test environment, since it's only working on RSpec for now you need to configure your @spec_helper@:
 
-bc..
-RSpec.configure do |config|
+bc..  RSpec.configure do |config|
   config.after :each do
     Aidmock.verify
   end
@@ -41,17 +40,13 @@ h3. Don't use @mock@ and @stub@ classes from your mock framework
 
 Sometimes you wanna do something like this:
 
-```ruby
-obj = mock
+bc. obj = mock
 obj.should_receive(:something)
-```
 
 With Aidmock we don't recommend you to do these things, because this way the mock object will be an instance of a mock from your framework, and we can't realise which class you are trying to mock. Instead, you should do this:
 
-```ruby
-obj = SomeClass.allocate
+bc. obj = SomeClass.allocate
 obj.should_receive(:something)
-```
 
 This way can clear parse it. You can call @allocate@ on any class, so, this way you initialize it without need to pass @initiaze@ params.
 
