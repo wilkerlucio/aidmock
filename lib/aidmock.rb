@@ -27,6 +27,7 @@ module Aidmock
   autoload :VoidClass, 'aidmock/void_class'
   autoload :Frameworks, 'aidmock/frameworks'
   autoload :Matchers, 'aidmock/matchers'
+  autoload :Sanity, 'aidmock/sanity'
 
   class << self
     def interface(klass, &block)
