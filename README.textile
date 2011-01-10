@@ -50,6 +50,12 @@ obj.should_receive(:something)
 
 This way can clear parse it. You can call @allocate@ on any class, so, this way you initialize it without need to pass @initiaze@ params.
 
+h3. Not Interface Warn
+
+By default Aidmock will warn you when you try to mock/stub something that you don't interfaced. You can remove this warn with following snippet:
+
+bc. Aidmock.warn_undefined_interface = false
+
 h2. Interfacing
 
 The major point of Aidmock is interfacing, it's when you define how your object's are supposed to work, it's really like you define methods on static languages like C and Java, but it's more dynamic and cool to work with :)
