@@ -72,6 +72,10 @@ The return and arguments in really are matchers, they match if the value used co
 
 This interface will automatic create some specs, that checks if these methods are defined on @Person@ class, and if they respect the method arity. And most important, when you stub or mock the Person, it will check interface, will check if you are mocking with correct return values and params, this will make your double safe.
 
+h3. Class Methods
+
+For interfacing class methods just use @class_method@ instead of @method@, everything else is same for both.
+
 h3. Method Names
 
 The method names can be specified as symbol or regexp, use symbol for method exact names, or regexp for dynamic names, see an example below:
