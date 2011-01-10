@@ -72,7 +72,7 @@ module Aidmock
 
     def find_method_on_chain(double, chain)
       chain.each do |interface|
-        method = interface.find_method(double.method)
+        method = interface.find_method(double)
         return method if method
       end
 

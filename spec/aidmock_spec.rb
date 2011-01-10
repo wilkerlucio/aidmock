@@ -76,7 +76,7 @@ describe Aidmock do
     it "get method if the interface has it" do
       double = stub(:method => :some)
       interface = stub
-      interface.stub(:find_method).with(:some).and_return(true)
+      interface.stub(:find_method).with(double).and_return(true)
 
       Aidmock.send(:find_method_on_chain, double, [interface]).should == true
     end
@@ -84,7 +84,7 @@ describe Aidmock do
     it "return nil if no interface has the method" do
       double = stub(:method => :some)
       interface = stub
-      interface.stub(:find_method).with(:some) { nil }
+      interface.stub(:find_method).with(double) { nil }
 
       Aidmock.send(:find_method_on_chain, double, [interface]).should == nil
     end
@@ -93,11 +93,11 @@ describe Aidmock do
       m1 = mock, m2 = mock
       double = stub(:method => :some)
       interface = stub
-      interface.stub(:find_method).with(:some) { nil }
+      interface.stub(:find_method).with(double) { nil }
       interface2 = stub
-      interface2.stub(:find_method).with(:some) { m1 }
+      interface2.stub(:find_method).with(double) { m1 }
       interface3 = stub
-      interface3.stub(:find_method).with(:some) { m2 }
+      interface3.stub(:find_method).with(double) { m2 }
 
       Aidmock.send(:find_method_on_chain, double, [interface, interface2, interface3]).should == m1
     end
