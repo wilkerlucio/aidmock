@@ -8,6 +8,10 @@ RSpec.configure do |config|
 end
 
 class Person
+  def self.something(hi)
+
+  end
+
   def first_name
     "first"
   end
@@ -22,6 +26,8 @@ class Person
 end
 
 Aidmock.interface Person do
+  class_method :something, String, String
+
   method :first_name, String
   method :last_name, String
   method :full_name, String
