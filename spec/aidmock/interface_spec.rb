@@ -38,5 +38,29 @@ describe Aidmock::Interface do
 
       interface.find_method(double).should == method
     end
+
+    it "find method on class" do
+      interface = Interface.new(Object)
+      method = interface.class_method(:some, nil)
+      double = MockDescriptor.new(Object, :some, nil, [])
+
+      interface.find_method(double).should == method
+    end
+
+    it "not find an class method on instance search" do
+      interface = Interface.new(Object)
+      method = interface.class_method(:some, nil)
+      double = MockDescriptor.new(nil, :some, nil, [])
+
+      interface.find_method(double).should == nil
+    end
+
+    it "not find an instance method on class search" do
+      interface = Interface.new(Object)
+      method = interface.method(:some, nil)
+      double = MockDescriptor.new(Object, :some, nil, [])
+
+      interface.find_method(double).should == nil
+    end
   end
 end

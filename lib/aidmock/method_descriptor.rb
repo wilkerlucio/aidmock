@@ -20,12 +20,14 @@
 
 module Aidmock
   class MethodDescriptor
-    attr_accessor :name, :type, :arguments
+    attr_accessor :name, :type, :arguments, :class_method
+    alias :class_method? :class_method
 
     def initialize(name, type, *arguments)
       @name = name
       @type = ::Aidmock::Matchers.create(type)
       @arguments = arguments.map { |arg| ::Aidmock::Matchers.create(arg) }
+      @class_method = false
     end
 
     def verify(double)

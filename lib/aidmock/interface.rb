@@ -27,6 +27,7 @@ module Aidmock
     def initialize(klass)
       @klass = klass
       @methods = []
+      @class_methods = []
     end
 
     def method(name, type, *arguments)
@@ -35,8 +36,16 @@ module Aidmock
       method
     end
 
+    def class_method(name, type, *arguments)
+      method = MethodDescriptor.new(name, type, *arguments)
+      method.class_method = true
+      @class_methods << method
+      method
+    end
+
     def find_method(mock)
-      @methods.find do |method|
+      methods = mock.object.instance_of?(Class) ? @class_methods : @methods
+      methods.find do |method|
         if method.name.instance_of? ::Regexp
           method.name.match mock.method.to_s
         else
