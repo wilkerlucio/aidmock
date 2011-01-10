@@ -56,8 +56,7 @@ The major point of Aidmock is interfacing, it's when you define how your object'
 
 Let's try it and define a simple interface:
 
-```ruby
-Aidmock.interface Person do
+bc.. Aidmock.interface Person do
   method :first_name, String
   method :first_name=, nil, String
 
@@ -66,7 +65,6 @@ Aidmock.interface Person do
 
   method :full_name, String
 end
-```
 
 p. Ok, let's take some time to look at what we are doing. We use a DSL created by Aidmock to define the class interface. In this case we use the @method@ method to describe an instance method, the first argument is the method name, second one is the return, and after return we can send any number of params that we want, they are the arguments.
 
@@ -78,12 +76,10 @@ h3. Method Names
 
 The method names can be specified as symbol or regexp, use symbol for method exact names, or regexp for dynamic names, see an example below:
 
-```ruby
-Aidmock.Interface MyAR do
+bc. Aidmock.Interface MyAR do
   method :table, Symbol
   method /find_by_.+/, String
 end
-```
 
 h2. Matchers
 
@@ -108,10 +104,8 @@ DSL helper: @any_of(*matchers)@
 Conversion: use an array
 
 Example:
-```ruby
-method :concat, String, [String, Fixnum]
+bc. method :concat, String, [String, Fixnum]
 method :concat, String, any_of(String, Fixnum) # same as above line
-```
 
 h3(#anything_matcher). AnythingMatcher
 
@@ -121,10 +115,8 @@ DSL Helper: @anything@
 Conversion: use a @nil@
 
 Example:
-```ruby
-method :puts, nil
+bc. method :puts, nil
 method :puts, anything #same as above line
-```
 
 h3(#duck_type_matcher). DuckTypeMatcher
 
@@ -134,10 +126,8 @@ DSL Helper: @respond_to(*methods)@
 Conversion: use a symbol
 
 Example:
-```ruby
-method :write, :to_s
+bc. method :write, :to_s
 method :write, respond_to(:to_s) # same as above line
-```
 
 h3(#instance_of_matcher). InstanceOfMatcher
 
@@ -146,9 +136,7 @@ Check if the object is the instance of given class.
 DSL Helper: @instance_of(klass)@
 
 Example:
-```ruby
-method :to_s, instance_of(String)
-```
+bc. method :to_s, instance_of(String)
 
 h3(#kind_of_matcher). KindOfMatcher
 
@@ -158,10 +146,8 @@ DSL Helper: @kind_of(klass)@
 Conversion: use any class
 
 Example:
-```ruby
-method :find, ActiveRecord::Base
+bc. method :find, ActiveRecord::Base
 method :find, kind_of(ActiveRecord::Base) # same as above line
-```
 
 h3(#hash_matcher). HashMatcher
 
@@ -171,11 +157,9 @@ DSL Helper: @hash_including(hash, strict = false)@
 Conversion: use any hash
 
 Example:
-```ruby
-method :find, {:conditions => [String, Array], :order => String}
+bc. method :find, {:conditions => [String, Array], :order => String}
 method :find, has_including(:conditions => [String, Array], :order => String) # same as above
 method :find, has_including({:conditions => [String, Array], :order => String}, true) # will require to be called with all keys defined
-```
 
 h3(#not_nil_arg_matcher). NotNilArgMatcher
 
@@ -184,10 +168,8 @@ By default, all matchers will accept a @nil@ value, if you want to require the v
 DSL Helper: @not_nil(matcher)@ or @nn(matcher)@
 
 Example:
-```ruby
-method :name=, nil, nn(String)
+bc. method :name=, nil, nn(String)
 method :name=, nil, not_nil(String) # same as above
-```
 
 h3(#optional_arg_matcher). OptionalArgMatcher
 
@@ -196,10 +178,8 @@ When you want optional arguments, the @OptionalArgMatcher@ will solve it for you
 DSL Helper: @optional(matcher)@ or @o(matcher)@
 
 Example:
-```ruby
-method :something, nil, o(String)
+bc. method :something, nil, o(String)
 method :something, nil, optional(String) # same as above
-```
 
 h3(#splat_arg_matcher). SplatArgMatcher
 
@@ -208,17 +188,14 @@ When you want to use splat arguments (example: @def thing(*args)@) this matcher 
 DSL Helper: @splat(matcher)@ or @s(matcher)@
 
 Example:
-```ruby
-method :something, s(nil) # will accept splat with anything(nil will be converted on "AnythingMatcher":#anything_matcher)
+bc. method :something, s(nil) # will accept splat with anything(nil will be converted on "AnythingMatcher":#anything_matcher)
 method :something, splat(nil) # same as above
-```
 
 h2. Class Inheritance and Modules
 
 Aidmock respects your class inheritance and module definition, so, the below example will be valid:
 
-```ruby
-class Animal
+bc.. class Animal
   def scream(noise)
     puts noise.to_s + "!!!"
   end
@@ -235,4 +212,3 @@ it "test inheritance" do
   dog = Dog.allocate
   dog.stub(:scream).with("ha").and_return("ha!!!") # this stub will be verified as you expect
 end
-```
