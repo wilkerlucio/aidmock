@@ -22,13 +22,12 @@ h2. Configuration
 
 In order to use Aidmock you need to configure it on your test environment, since it's only working on RSpec for now you need to configure your @spec_helper@:
 
-```ruby
-  RSpec.configure do |config|
-    config.after :each do
-      Aidmock.verify
-    end
+bc..
+RSpec.configure do |config|
+  config.after :each do
+    Aidmock.verify
   end
-```
+end
 
 # load or write your interfaces here
 
@@ -99,12 +98,12 @@ h3(#conversions). Matcher Conversion
 
 In most of cases, instead of creating a matcher directly, you will use a "Matcher Conversion", it takes simple values and create matchers based on them, in the table above you can see all available conversions:
 
-|_. Object Type |_. Matcher                            |_. Description                                                                                          |
-| Class         | "KindOfMatcher":#kind_of_matcher     | if object is class, it will create a @KindOfMatcher@ with the given class                              |
-| Array         | "AnyMatcher":#any_matcher            | if the object is an array, it will create an @AnyMatcher@, where each item of array will be an matcher |
-| nil           | "AnythingMatcher":#anything_matcher  | if the object is nil, it will create an @AnythingMatcher@                                              |
-| Symbol        | "DuckTypeMatcher":#duck_type_matcher | if the object is a symbol, it will create an @DuckTypeMatcher@ that responds to it                     |
-| Hash          | "HashMatcher":#hash_matcher          | if the object is an hash, it will create an @HashMatcher@ with given hash                              |
+|_. Object Type  |_. Matcher       |_. Description                                                                                          |
+| Class          | KindOfMatcher   | if object is class, it will create a @KindOfMatcher@ with the given class                              |
+| Array          | AnyMatcher      | if the object is an array, it will create an @AnyMatcher@, where each item of array will be an matcher |
+| nil            | AnythingMatcher | if the object is nil, it will create an @AnythingMatcher@                                              |
+| Symbol         | DuckTypeMatcher | if the object is a symbol, it will create an @DuckTypeMatcher@ that responds to it                     |
+| Hash           | HashMatcher     | if the object is an hash, it will create an @HashMatcher@ with given hash                              |
 
 h3(#any_matcher). AnyMatcher
 
