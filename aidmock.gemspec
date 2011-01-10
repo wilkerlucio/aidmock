@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Wilker Lucio"]
   s.date = %q{2011-01-10}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{Aidmock, safe mocking and interfacing for Ruby}
   s.email = %q{wilkerlucio@gmail.com}
   s.extra_rdoc_files = [
     "README.textile"

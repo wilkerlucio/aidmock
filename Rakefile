@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "aidmock"
     gem.summary = %Q{Aidmock, safe mocking and interfacing for Ruby}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{Aidmock, safe mocking and interfacing for Ruby}
     gem.email = "wilkerlucio@gmail.com"
     gem.homepage = "http://github.com/wilkerlucio/aidmock"
     gem.authors = ["Wilker Lucio"]
