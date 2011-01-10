@@ -41,10 +41,18 @@ module Aidmock
       end
     end
 
+    def any_of(*matchers)
+      AnyMatcher.new(*matchers)
+    end
+
     class AnythingMatcher
       def match?(object)
         true
       end
+    end
+
+    def anything
+      AnythingMatcher.new
     end
 
     class DuckTypeMatcher
@@ -58,6 +66,10 @@ module Aidmock
       end
     end
 
+    def respond_to(*methods)
+      DuckTypeMatcher.new(*methods)
+    end
+
     class InstanceOfMatcher
       def initialize(klass)
         @klass = klass
@@ -69,6 +81,10 @@ module Aidmock
       end
     end
 
+    def instance_of(klass)
+      InstanceOfMatcher.new(klass)
+    end
+
     class KindOfMatcher
       def initialize(klass)
         @klass = klass
@@ -78,6 +94,10 @@ module Aidmock
         return true if object.nil?
         object.kind_of? @klass
       end
+    end
+
+    def kind_of(klass)
+      KindOfMatcher.new(klass)
     end
 
     class HashMatcher
@@ -105,6 +125,10 @@ module Aidmock
       end
     end
 
+    def hash_including(hash, strict = false)
+      HashMatcher.new(hash, strict)
+    end
+
     class NotNilArgMatcher
       def initialize(matcher)
         @matcher = ::Aidmock::Matchers.create(matcher)
@@ -116,6 +140,12 @@ module Aidmock
       end
     end
 
+    def not_nil(value)
+      NotNilArgMatcher.new(value)
+    end
+
+    alias_method :nn, :not_nil
+
     class OptionalArgMatcher
       def initialize(matcher)
         @matcher = ::Aidmock::Matchers.create(matcher)
@@ -125,6 +155,12 @@ module Aidmock
         @matcher.match? object
       end
     end
+
+    def optional(value)
+      OptionalArgMatcher.new(value)
+    end
+
+    alias_method :o, :optional
 
     class SplatArgMatcher
       def initialize(matcher = nil)
@@ -136,22 +172,10 @@ module Aidmock
       end
     end
 
-    def optional(value)
-      OptionalArgMatcher.new(value)
-    end
-
-    alias_method :o, :optional
-
     def splat(value)
       SplatArgMatcher.new(value)
     end
 
     alias_method :s, :splat
-
-    def not_nil(value)
-      NotNilArgMatcher.new(value)
-    end
-
-    alias_method :nn, :not_nil
   end
 end
