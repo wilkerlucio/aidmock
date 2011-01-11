@@ -2,11 +2,11 @@ h1. Aidmock
 
 Aidmock is an safe mock and interfacing library for Ruby.
 
-Aidmock don't target any specific test framework or mock framework, our goal is to provide a wide solution, that support's the major test and mock frameworks. But for now we are only supporting RSpec 2 and RSpec Mocks. But more drivers for other framework will be available soon.
+Aidmock doesn't target any specific mock or test framework Our goal is to provide a wide solution, that supports the major mock and test frameworks. For now we are only supporting RSpec 2 and RSpec Mocks, but more drivers for other frameworks will be available soon.
 
-The basic idea of Aidmock is we belive that Mocks are good, but they can be scary too, leading false positives, Aidmock tries to make it safer. To read more about motivation, see our "motivation":https://github.com/wilkerlucio/aidmock/wiki/Motivation page.
+The basic idea of Aidmock is we believe that Mocks are good, but they can be scary too, leading to false positives. Aidmock tries to make it safer. To read more about motivation, see the "motivation":https://github.com/wilkerlucio/aidmock/wiki/Motivation page.
 
-Aidmock also generate some sanity checks for your interfaces too, so, defining interfaces can be a nice point when starting the defition of your classes. Let's start with setup and configuration, them we will see how to define our interfaces.
+Aidmock also generate some sanity checks for your interfaces, so defining interfaces can be a nice point when starting the defition of your classes. Let's start with setup and configuration, then we will see how to define our interfaces.
 
 h2. Installation
 
@@ -14,13 +14,13 @@ To install Aidmock just run:
 
 bc. gem install aidmock
 
-Or configure your Gemfile:
+Or add it to your Gemfile:
 
 bc. gem "aidmock"
 
 h2. Configuration
 
-In order to use Aidmock you need to configure it on your test environment, since it's only working on RSpec for now you need to configure your @spec_helper@:
+In order to use Aidmock, you need to configure it on your test environment. Since it's only working on RSpec for now you need to configure your @spec_helper@:
 
 bc..  RSpec.configure do |config|
   config.after :each do
@@ -32,9 +32,9 @@ end
 
 Aidmock::Sanity.sanitize # it will run sanity checks, just call it after have all interfaces defined
 
-h2. How it works
+h2. How It Works
 
-Aidmock runs after each test that you do, it will get the mocks/stubs defined by your test, them it will match these doubles with interface that you have defined for that object, and if your mock don't respect your interface, it will raise an error, preventing you from having a false positive. Simple :)
+Aidmock runs after each test you do. It will get the mocks/stubs defined by your test and match these doubles with the interface you have defined for that object. If your mock doesn't respect your interface, it will raise an error, preventing you from having a false positive. Simple :)
 
 h3. Don't use @mock@ and @stub@ classes from your mock framework
 
@@ -43,22 +43,22 @@ Sometimes you wanna do something like this:
 bc. obj = mock
 obj.should_receive(:something)
 
-With Aidmock we don't recommend you to do these things, because this way the mock object will be an instance of a mock from your framework, and we can't realise which class you are trying to mock. Instead, you should do this:
+With Aidmock we don't recommend you to do these things, because this way the mock object will be an instance of a mock from your framework, and we can't realize which class you are trying to mock. Instead, you should do this:
 
 bc. obj = SomeClass.allocate
 obj.should_receive(:something)
 
-This way can clear parse it. You can call @allocate@ on any class, so, this way you initialize it without need to pass @initiaze@ params.
+This way can clear parse it. You can call @allocate@ on any class, so this way you initialize it without need to pass @initiaze@ params.
 
-h3. Not Interface Warn
+h3. No interface warn
 
-By default Aidmock will warn you when you try to mock/stub something that you don't interfaced. You can remove this warn with following snippet:
+By default, Aidmock will warn you when you try to mock/stub something that you haven't interfaced. You can remove this warn with following snippet:
 
 bc. Aidmock.warn_undefined_interface = false
 
 h2. Interfacing
 
-The major point of Aidmock is interfacing, it's when you define how your object's are supposed to work, it's really like you define methods on static languages like C and Java, but it's more dynamic and cool to work with :)
+The major point of Aidmock is interfacing: it's when you define how your object's are supposed to work. It's really like you define methods on static languages as C or Java, but it's more dynamic and cool to work with. :)
 
 Let's try it and define a simple interface:
 
@@ -72,19 +72,19 @@ bc.. Aidmock.interface Person do
   method :full_name, String
 end
 
-p. Ok, let's take some time to look at what we are doing. We use a DSL created by Aidmock to define the class interface. In this case we use the @method@ method to describe an instance method, the first argument is the method name, second one is the return, and after return we can send any number of params that we want, they are the arguments.
+p. Ok, let's take some time to look at what we are doing. We use a DSL created by Aidmock to define the class interface. In this case we use @method@ to describe an instance method. The first argument is the method name, the second one is the return, and after return we can send any number of params we want: they are the arguments.
 
-The return and arguments in really are matchers, they match if the value used corresponds to the matcher, in above example we used 2 different kind of matchers, the @KindOfMatcher@ (when we used the String class, it created this matcher) and the @AnythingMatcher@ (when we used nil).
+The return and arguments in fact are matchers; they match if the value used corresponds to the matcher. In the example above, we used two different kind of matchers: the @KindOfMatcher@ (when we used the String class, it created this matcher) and the @AnythingMatcher@ (when we used nil).
 
-This interface will automatic create some specs, that checks if these methods are defined on @Person@ class, and if they respect the method arity. And most important, when you stub or mock the Person, it will check interface, will check if you are mocking with correct return values and params, this will make your double safe.
+This interface will automatically create some specs that check if these methods are defined on @Person@ class and if they respect the method arity. And most important, when you stub or mock the Person, it will check the interface and if you are mocking with correct params and return values; this will make your double safe.
 
 h3. Class Methods
 
-For interfacing class methods just use @class_method@ instead of @method@, everything else is same for both.
+For interfacing class methods just use @class_method@ instead of @method@. Everything else is same for both.
 
 h3. Method Names
 
-The method names can be specified as symbol or regexp, use symbol for method exact names, or regexp for dynamic names, see an example below:
+The method names can be specified as symbol or regexp. Use symbol for method exact names and regexp for dynamic names.
 
 bc. Aidmock.Interface MyAR do
   method :table, Symbol
@@ -93,11 +93,11 @@ end
 
 h2. Matchers
 
-In above section we saw a simple example of how to create an interface, now we will go deeper and see all available matchers, and how to use them.
+In section above we saw a simple example of how to create an interface. Now we will go deeper and see all the available matchers and how to use them.
 
 h3(#conversions). Matcher Conversion
 
-In most of cases, instead of creating a matcher directly, you will use a "Matcher Conversion", it takes simple values and create matchers based on them, in the table above you can see all available conversions:
+In most of cases, instead of creating a matcher directly, you will use a "Matcher Conversion". It takes simple values and create matchers based on them. In the table above you can see all available conversions:
 
 |_. Object Type  |_. Matcher       |_. Description                                                                                          |
 | Class          | KindOfMatcher   | if object is class, it will create a @KindOfMatcher@ with the given class                              |
@@ -108,7 +108,7 @@ In most of cases, instead of creating a matcher directly, you will use a "Matche
 
 h3(#any_matcher). AnyMatcher
 
-This matcher can be used when you want to have more than one matcher option, it takes a list of matchers (or use a value to be converted by "conversions":#conversions) and it will match ok if any of these matchers matches.
+This matcher can be used when you want to have more than one matcher option. It takes a list of matchers (or use a value to be converted by "conversions":#conversions) and it will match if any of these matchers matches.
 
 DSL helper: @any_of(*matchers)@
 Conversion: use an array
@@ -116,11 +116,11 @@ Conversion: use an array
 Example:
 
 bc. method :concat, String, [String, Fixnum]
-method :concat, String, any_of(String, Fixnum) # same as above line
+method :concat, String, any_of(String, Fixnum) # same as line above
 
 h3(#anything_matcher). AnythingMatcher
 
-This matcher will simple accept anything.
+This matcher will simply accept anything.
 
 DSL Helper: @anything@
 Conversion: use a @nil@
@@ -128,11 +128,11 @@ Conversion: use a @nil@
 Example:
 
 bc. method :puts, nil
-method :puts, anything #same as above line
+method :puts, anything #same as line above
 
 h3(#duck_type_matcher). DuckTypeMatcher
 
-Duck type matcher will check if object responds to all given methods.
+Duck type matcher will check if an object responds to all the given methods.
 
 DSL Helper: @respond_to(*methods)@
 Conversion: use a symbol
@@ -140,7 +140,7 @@ Conversion: use a symbol
 Example:
 
 bc. method :write, :to_s
-method :write, respond_to(:to_s) # same as above line
+method :write, respond_to(:to_s) # same as line above
 
 h3(#instance_of_matcher). InstanceOfMatcher
 
@@ -166,7 +166,7 @@ method :find, kind_of(ActiveRecord::Base) # same as above line
 
 h3(#hash_matcher). HashMatcher
 
-The hash matcher check if argument is a hash, and check each key defined on hash, if user send a hash with key that is not defined on hash definition it will fail, and for each defined key on hash it will check the value type. By default it will ignore if user don't send all expected options (which is a common pattern for options arguments), but it has a strict mode that will require all keys to be defined.
+The hash matcher checks if the argument is a hash and each key defined on it. If the user sends a hash with a key that is not present on the hash definition, it will fail. It also checks the value type of each key. By default it will ignore if the user doesn't send all expected options (which is a common pattern for options arguments), but it has a strict mode that will require all the keys to be defined.
 
 DSL Helper: @hash_including(hash, strict = false)@
 Conversion: use any hash
@@ -179,7 +179,7 @@ method :find, has_including({:conditions => [String, Array], :order => String}, 
 
 h3(#not_nil_arg_matcher). NotNilArgMatcher
 
-By default, all matchers will accept a @nil@ value, if you want to require the value (making a @nil@ return false) you can use this matcher. You also need to send a matcher as param (to check when value is not nil, you can use the conversions too).
+By default, all matchers will accept a @nil@ value. If you want to require the value (making a @nil@ return false), you can use this matcher. You also need to send a matcher as param (to check when value is not nil, you can use the conversions too).
 
 DSL Helper: @not_nil(matcher)@ or @nn(matcher)@
 
