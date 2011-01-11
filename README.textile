@@ -2,7 +2,7 @@ h1. Aidmock
 
 Aidmock is an safe mock and interfacing library for Ruby.
 
-Aidmock doesn't target any specific mock or test framework Our goal is to provide a wide solution, that supports the major mock and test frameworks. For now we are only supporting RSpec 2 and RSpec Mocks, but more drivers for other frameworks will be available soon.
+Aidmock doesn't target any specific mock or test framework. Our goal is to provide a wide solution, that supports the major mock and test frameworks. For now we are only supporting RSpec 2 and RSpec Mocks, but more drivers for other frameworks will be available soon.
 
 The basic idea of Aidmock is we believe that Mocks are good, but they can be scary too, leading to false positives. Aidmock tries to make it safer. To read more about motivation, see the "motivation":https://github.com/wilkerlucio/aidmock/wiki/Motivation page.
 
@@ -207,7 +207,7 @@ DSL Helper: @splat(matcher)@ or @s(matcher)@
 
 Example:
 
-bc. method :something, s(nil) # will accept splat with anything(nil will be converted on "AnythingMatcher":#anything_matcher)
+bc. method :something, s(nil) # will accept splat with anything(nil will be converted one AnythingMatcher)
 method :something, splat(nil) # same as above
 
 h2. Class Inheritance and Modules
