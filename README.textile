@@ -22,9 +22,14 @@ h2. Configuration
 
 In order to use Aidmock, you need to configure it on your test environment. Since it's only working on RSpec for now you need to configure your @spec_helper@:
 
-bc..  RSpec.configure do |config|
+bc..
+RSpec.configure do |config|
+  config.before :all do
+    Aidmock.setup # it will do any nescessary setup, like extending your framework mocks
+  end
+
   config.after :each do
-    Aidmock.verify
+    Aidmock.verify # it will verify created mocks after each spec
   end
 end
 
@@ -36,19 +41,19 @@ h2. How It Works
 
 Aidmock runs after each test you do. It will get the mocks/stubs defined by your test and match these doubles with the interface you have defined for that object. If your mock doesn't respect your interface, it will raise an error, preventing you from having a false positive. Simple :)
 
-h3. Don't use @mock@ and @stub@ classes from your mock framework
+h3. Remember to constrain your mocks
 
 Sometimes you wanna do something like this:
 
 bc. obj = mock
 obj.should_receive(:something)
 
-With Aidmock we don't recommend you to do these things, because this way the mock object will be an instance of a mock from your framework, and we can't realize which class you are trying to mock. Instead, you should do this:
+With Aidmock we can't detect the class with only this, so, for a safe mocking on this cases you should constrain the mock for one class or module that you already interfaced:
 
-bc. obj = SomeClass.allocate
+bc. obj = mock.constrained_to(SomeInterface)
 obj.should_receive(:something)
 
-This way can clear parse it. You can call @allocate@ on any class, so this way you initialize it without need to pass @initiaze@ params.
+This way can clear parse it.
 
 h3. No interface warn
 

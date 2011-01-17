@@ -23,5 +23,15 @@ module Aidmock
     autoload :RSpec, 'aidmock/frameworks/rspec'
 
     MockDescriptor = Struct.new(:object, :method, :result, :arguments)
+
+    module DoubleExtensions
+      attr_reader :aidmock_class
+
+      def constrained_to(interface)
+        @aidmock_class = interface
+
+        self
+      end
+    end
   end
 end

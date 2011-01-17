@@ -30,6 +30,20 @@ end
 describe Aidmock::Frameworks::RSpec do
   framework = Aidmock::Frameworks::RSpec
 
+  context ".extend_doubles" do
+    it "save and retrieve aidmock class" do
+      framework.extend_doubles
+      obj = mock.constrained_to(String)
+      obj.aidmock_class.should == String
+    end
+
+    it "save and retrieve aidmock class for stub" do
+      framework.extend_doubles
+      obj = stub.constrained_to(String)
+      obj.aidmock_class.should == String
+    end
+  end
+
   context ".mocks" do
     context "caller object" do
       it "return the object" do

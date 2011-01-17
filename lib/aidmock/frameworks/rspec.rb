@@ -43,6 +43,10 @@ module Aidmock
           mocks
         end
 
+        def extend_doubles
+          ::RSpec::Mocks::Mock.send(:include, ::Aidmock::Frameworks::DoubleExtensions)
+        end
+
         protected
 
         def parse_double_result(double)

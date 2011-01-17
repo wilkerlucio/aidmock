@@ -50,6 +50,14 @@ module Aidmock
       @interfaces ||= {}
     end
 
+    def framework
+      ::Aidmock::Frameworks::RSpec
+    end
+
+    def setup
+      framework.extend_doubles
+    end
+
     protected
 
     def verify_double(double)
@@ -87,11 +95,8 @@ module Aidmock
     end
 
     def extract_class(object)
+      return object.aidmock_class if object.respond_to? :aidmock_class and object.aidmock_class != nil
       object.instance_of?(Class) ? object : object.class
-    end
-
-    def framework
-      ::Aidmock::Frameworks::RSpec
     end
 
     def create_or_update_interface(klass, &block)

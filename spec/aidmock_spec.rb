@@ -113,6 +113,20 @@ describe Aidmock do
   end
 
   context ".extract_class" do
+    it "return aidmock_class if object responds to it" do
+      obj = mock
+      obj.stub!(:aidmock_class) { Fixnum }
+
+      Aidmock.send(:extract_class, obj).should == Fixnum
+    end
+
+    it "return class itself if object aidmock_class is nil" do
+      obj = mock
+      obj.stub!(:aidmock_class) { nil }
+
+      Aidmock.send(:extract_class, obj).should == ::RSpec::Mocks::Mock
+    end
+
     it "return the object class if it's an instance" do
       Aidmock.send(:extract_class, "string").should == String
     end
