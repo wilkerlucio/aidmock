@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{aidmock}
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Wilker Lucio"]
-  s.date = %q{2011-01-10}
+  s.date = %q{2011-01-17}
   s.description = %q{Aidmock, safe mocking and interfacing for Ruby}
   s.email = %q{wilkerlucio@gmail.com}
   s.extra_rdoc_files = [
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "aidmock.gemspec",
+     "examples/integration_spec.rb",
      "examples/mock_spec.rb",
      "lib/aidmock.rb",
      "lib/aidmock/basic_object.rb",
@@ -55,6 +56,7 @@ Gem::Specification.new do |s|
      "spec/aidmock/sanity_spec.rb",
      "spec/aidmock_spec.rb",
      "spec/spec_helper.rb",
+     "examples/integration_spec.rb",
      "examples/mock_spec.rb"
   ]
 
