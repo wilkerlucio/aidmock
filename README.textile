@@ -22,8 +22,7 @@ h2. Configuration
 
 In order to use Aidmock, you need to configure it on your test environment. Since it's only working on RSpec for now you need to configure your @spec_helper@:
 
-bc..
-RSpec.configure do |config|
+bc.. RSpec.configure do |config|
   config.before :all do
     Aidmock.setup # it will do any nescessary setup, like extending your framework mocks
   end
