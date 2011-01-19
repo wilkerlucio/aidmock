@@ -232,7 +232,7 @@ Aidmock.interface Animal do
 end
 
 it "test inheritance" do
-  dog = Dog.allocate
+  dog = mock.constrained_to(Dog)
   dog.stub(:scream).with("ha").and_return("ha!!!") # this stub will be verified as you expect
 end
 
