@@ -236,6 +236,16 @@ it "test inheritance" do
   dog.stub(:scream).with("ha").and_return("ha!!!") # this stub will be verified as you expect
 end
 
+h2. Changelog
+
+h3. 0.2.0
+
+* Added .constrained_to to mocks
+
+h3. 0.1.0
+
+* initial version
+
 h2. Feedback
 
 Aidmock still be somekind of experimental project, any feedback will help a lot. Please use github issues for reporting any bug and/or suggestion :)
