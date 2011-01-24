@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{aidmock}
-  s.version = "0.2.0"
+  s.version = "0.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Wilker Lucio"]
-  s.date = %q{2011-01-17}
+  s.date = %q{2011-01-24}
   s.description = %q{Aidmock, safe mocking and interfacing for Ruby}
   s.email = %q{wilkerlucio@gmail.com}
   s.extra_rdoc_files = [
@@ -23,9 +23,11 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "aidmock.gemspec",
+     "examples/autointerface_spec.rb",
      "examples/integration_spec.rb",
      "examples/mock_spec.rb",
      "lib/aidmock.rb",
+     "lib/aidmock/auto_interface.rb",
      "lib/aidmock/basic_object.rb",
      "lib/aidmock/errors.rb",
      "lib/aidmock/frameworks.rb",
@@ -35,6 +37,7 @@ Gem::Specification.new do |s|
      "lib/aidmock/method_descriptor.rb",
      "lib/aidmock/sanity.rb",
      "lib/aidmock/void_class.rb",
+     "spec/aidmock/auto_interface_spec.rb",
      "spec/aidmock/frameworks/rspec_spec.rb",
      "spec/aidmock/interface_spec.rb",
      "spec/aidmock/matchers_spec.rb",
@@ -49,13 +52,15 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Aidmock, safe mocking and interfacing for Ruby}
   s.test_files = [
-    "spec/aidmock/frameworks/rspec_spec.rb",
+    "spec/aidmock/auto_interface_spec.rb",
+     "spec/aidmock/frameworks/rspec_spec.rb",
      "spec/aidmock/interface_spec.rb",
      "spec/aidmock/matchers_spec.rb",
      "spec/aidmock/method_descriptor_spec.rb",
      "spec/aidmock/sanity_spec.rb",
      "spec/aidmock_spec.rb",
      "spec/spec_helper.rb",
+     "examples/autointerface_spec.rb",
      "examples/integration_spec.rb",
      "examples/mock_spec.rb"
   ]
