@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require File.expand_path("../../spec_helper", __FILE__)
+
 describe Aidmock::MethodDescriptor do
   mock_descriptor = Aidmock::Frameworks::MockDescriptor
   md = Aidmock::MethodDescriptor
