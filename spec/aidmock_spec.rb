@@ -42,13 +42,42 @@ describe Aidmock do
   end
 
   context ".verify_double" do
-    it "call to verify chain if the chain has any element" do
-      double = Aidmock::Frameworks::MockDescriptor.new("object", :to_s, nil, [])
+    context "has a chain" do
+      it "call to verify chain" do
+        double = Aidmock::Frameworks::MockDescriptor.new("object", :to_s, nil, [])
 
-      Aidmock.stub!(:chain_for).with(String) { [String] }
-      Aidmock.should_receive(:verify_double_on_chain).with(double, [String])
+        Aidmock.stub!(:chain_for).with(String) { [String] }
+        Aidmock.should_receive(:verify_double_on_chain).with(double, [String])
 
-      Aidmock.send :verify_double, double
+        Aidmock.send :verify_double, double
+      end
+    end
+
+    context "don't has a chain" do
+      context "autointerace enabled" do
+        it "define interface with autointerface" do
+          double = Aidmock::Frameworks::MockDescriptor.new("object", :to_s, nil, [])
+
+          Aidmock.stub!(:autointerface?) { true }
+          Aidmock.stub!(:chain_for).with(String) { [] }
+          Aidmock::AutoInterface.should_receive(:define).with(String) {}
+
+          Aidmock.send :verify_double, double
+        end
+      end
+
+      context "autointerface disabled" do
+        it "don't define autointerface and show a warning" do
+          double = Aidmock::Frameworks::MockDescriptor.new("object", :to_s, nil, [])
+
+          Aidmock.stub!(:warn_undefined_interface?) { false }
+          Aidmock.stub!(:autointerface?) { false }
+          Aidmock.stub!(:chain_for).with(String) { [] }
+          Aidmock::AutoInterface.should_not_receive(:define).with(String) {}
+
+          Aidmock.send :verify_double, double
+        end
+      end
     end
   end
 

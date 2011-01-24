@@ -22,6 +22,7 @@ require 'aidmock/errors'
 require 'aidmock/basic_object' unless Kernel.const_defined? :BasicObject
 
 module Aidmock
+  autoload :AutoInterface, 'aidmock/auto_interface'
   autoload :Interface, 'aidmock/interface'
   autoload :MethodDescriptor, 'aidmock/method_descriptor'
   autoload :VoidClass, 'aidmock/void_class'
@@ -30,8 +31,9 @@ module Aidmock
   autoload :Sanity, 'aidmock/sanity'
 
   class << self
-    attr_accessor :warn_undefined_interface
+    attr_accessor :warn_undefined_interface, :autointerface
     alias :warn_undefined_interface? :warn_undefined_interface
+    alias :autointerface? :autointerface
 
     def interface(klass, &block)
       interfaces[klass] = create_or_update_interface(klass, &block)
@@ -50,8 +52,16 @@ module Aidmock
       @interfaces ||= {}
     end
 
+    def has_interface?(klass)
+      interfaces[klass] ? true : false
+    end
+
     def framework
       ::Aidmock::Frameworks::RSpec
+    end
+
+    def test_framework
+      ::Aidmock::TestFrameworks::RSpec
     end
 
     def setup
@@ -66,6 +76,8 @@ module Aidmock
 
       if chain.length > 0
         verify_double_on_chain(double, chain)
+      elsif autointerface?
+        AutoInterface.define(klass)
       else
         puts "Aidmock Warning: unsafe mocking on class #{klass}, please interface it" if warn_undefined_interface?
       end
@@ -108,3 +120,4 @@ module Aidmock
 end
 
 Aidmock.warn_undefined_interface = true
+Aidmock.autointerface = true
