@@ -32,12 +32,18 @@ module Aidmock
     end
 
     class AnyMatcher
+      attr_reader :matchers
+
       def initialize(*matchers)
         @matchers = matchers.map { |matcher| ::Aidmock::Matchers.create(matcher) }
       end
 
       def match?(object)
         @matchers.any? { |matcher| matcher.match? object }
+      end
+
+      def ==(object)
+        object.class == AnyMatcher and object.matchers == @matchers
       end
     end
 
@@ -49,6 +55,10 @@ module Aidmock
       def match?(object)
         true
       end
+
+      def ==(object)
+        object.class == AnythingMatcher
+      end
     end
 
     def anything
@@ -56,6 +66,8 @@ module Aidmock
     end
 
     class DuckTypeMatcher
+      attr_reader :methods
+
       def initialize(*methods)
         @methods = methods
       end
@@ -64,6 +76,10 @@ module Aidmock
         return true if object.nil?
         @methods.all? { |method| object.respond_to? method }
       end
+
+      def ==(object)
+        object.class == DuckTypeMatcher and object.methods == @methods
+      end
     end
 
     def respond_to(*methods)
@@ -71,6 +87,8 @@ module Aidmock
     end
 
     class InstanceOfMatcher
+      attr_reader :klass
+
       def initialize(klass)
         @klass = klass
       end
@@ -79,6 +97,10 @@ module Aidmock
         return true if object.nil?
         object.instance_of? @klass
       end
+
+      def ==(object)
+        object.class == InstanceOfMatcher and object.klass == @klass
+      end
     end
 
     def instance_of(klass)
@@ -86,6 +108,8 @@ module Aidmock
     end
 
     class KindOfMatcher
+      attr_reader :klass
+
       def initialize(klass)
         @klass = klass
       end
@@ -94,6 +118,10 @@ module Aidmock
         return true if object.nil?
         object.kind_of? @klass
       end
+
+      def ==(object)
+        object.class == KindOfMatcher and object.klass == @klass
+      end
     end
 
     def kind_of(klass)
@@ -101,6 +129,8 @@ module Aidmock
     end
 
     class HashMatcher
+      attr_reader :hash, :strict
+
       def initialize(check_hash, strict = false)
         @hash = {}
         @strict = strict
@@ -123,6 +153,10 @@ module Aidmock
 
         true
       end
+
+      def ==(object)
+        object.class == HashMatcher and object.hash == @hash and object.strict == @strict
+      end
     end
 
     def hash_including(hash, strict = false)
@@ -130,6 +164,8 @@ module Aidmock
     end
 
     class NotNilArgMatcher
+      attr_reader :matcher
+
       def initialize(matcher)
         @matcher = ::Aidmock::Matchers.create(matcher)
       end
@@ -137,6 +173,10 @@ module Aidmock
       def match?(object)
         return false if object.nil?
         @matcher.match? object
+      end
+
+      def ==(object)
+        object.class == NotNilArgMatcher and object.matcher == @matcher
       end
     end
 
@@ -147,12 +187,18 @@ module Aidmock
     alias_method :nn, :not_nil
 
     class OptionalArgMatcher
+      attr_reader :matcher
+
       def initialize(matcher)
         @matcher = ::Aidmock::Matchers.create(matcher)
       end
 
       def match?(object)
         @matcher.match? object
+      end
+
+      def ==(object)
+        object.class == OptionalArgMatcher and object.matcher == @matcher
       end
     end
 
@@ -163,12 +209,18 @@ module Aidmock
     alias_method :o, :optional
 
     class SplatArgMatcher
+      attr_reader :matcher
+
       def initialize(matcher = nil)
         @matcher = ::Aidmock::Matchers.create(matcher)
       end
 
       def match?(values)
         values.all? { |value| @matcher.match? value }
+      end
+
+      def ==(other)
+        other.class == SplatArgMatcher and other.matcher == @matcher
       end
     end
 
