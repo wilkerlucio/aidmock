@@ -36,6 +36,16 @@ end
 
 Aidmock::Sanity.sanitize # it will run sanity checks, just call it after have all interfaces defined
 
+h2. Automatic Interfacing
+
+Since version 0.3.1 Aidmock supports automatic interfacing, this feature is enabled by default. With automatic interfacing Aidmock will define the class interface automatically for you if the interface is not already defined, we still encorage you to do some manual interface definitions since automatic interfacing can't be too much precise (it will generate method names and correct arity, but can't check value real types). But automatic interfaces is a nice start point for you at Aidmock, no need for big setups, work with third-part code (also built-in Ruby code too) and will give to you a new layer of safe to your mocks.
+
+Even when you start doing interfaces by hand, you may want to still having this feature enabled, since it will interface third-part code and built-in code.
+
+If you wanna do a hardcore Aidmock use, you can disable automatic interfacing with following snippet:
+
+bc. Aidmock.autointerface = false
+
 h2. How It Works
 
 Aidmock runs after each test you do. It will get the mocks/stubs defined by your test and match these doubles with the interface you have defined for that object. If your mock doesn't respect your interface, it will raise an error, preventing you from having a false positive. Simple :)
@@ -237,6 +247,14 @@ it "test inheritance" do
 end
 
 h2. Changelog
+
+h3. 0.3.1
+
+* Supporting automatic interfacing
+
+h3. 0.3.0
+
+* bad release, ignore this version please
 
 h3. 0.2.0
 
