@@ -7,6 +7,8 @@ RSpec.configure do |config|
   end
 end
 
+Aidmock.autointerface = false
+
 class Person
   def self.something(hi)
 

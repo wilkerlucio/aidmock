@@ -11,6 +11,8 @@ RSpec.configure do |config|
   end
 end
 
+Aidmock.autointerface = false
+
 class Address
   def full_address
     "testing"
