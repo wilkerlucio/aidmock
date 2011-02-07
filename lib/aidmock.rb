@@ -35,8 +35,10 @@ module Aidmock
     alias :warn_undefined_interface? :warn_undefined_interface
     alias :autointerface? :autointerface
 
-    def interface(klass, &block)
-      interfaces[klass] = create_or_update_interface(klass, &block)
+    def interface(klass, options = {}, &block)
+      options = {:auto => false}.merge(options)
+      AutoInterface.define(klass) if options[:auto]
+      interfaces[klass] = create_or_update_interface(klass, &block) if block
     end
 
     def verify

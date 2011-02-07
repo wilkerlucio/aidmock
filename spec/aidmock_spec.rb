@@ -22,6 +22,20 @@ require File.expand_path("../spec_helper", __FILE__)
 
 describe Aidmock do
   context ".interface" do
+    context "automatic interfacing" do
+      it "define interface if auto is specified" do
+        Aidmock::AutoInterface.should_receive(:define).with(String) {}
+        Aidmock.stub!(:interfaces) { {} }
+
+        Aidmock.interface String, :auto => true
+      end
+
+      it "don't automatic define interface if auto is false" do
+        Aidmock::AutoInterface.should_not_receive(:define)
+
+        Aidmock.interface String
+      end
+    end
   end
 
   context ".verify" do
