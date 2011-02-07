@@ -72,12 +72,12 @@ module Aidmock
 
     def verify_double(double)
       klass = extract_class(double.object)
+      AutoInterface.define(klass) if autointerface? and !has_interface?(klass)
+
       chain = chain_for(klass)
 
       if chain.length > 0
         verify_double_on_chain(double, chain)
-      elsif autointerface?
-        AutoInterface.define(klass)
       else
         puts "Aidmock Warning: unsafe mocking on class #{klass}, please interface it" if warn_undefined_interface?
       end

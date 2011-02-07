@@ -59,7 +59,8 @@ describe Aidmock do
           double = Aidmock::Frameworks::MockDescriptor.new("object", :to_s, nil, [])
 
           Aidmock.stub!(:autointerface?) { true }
-          Aidmock.stub!(:chain_for).with(String) { [] }
+          Aidmock.stub!(:has_interface?).with(String) { false }
+          Aidmock.stub!(:verify_double_on_chain)
           Aidmock::AutoInterface.should_receive(:define).with(String) {}
 
           Aidmock.send :verify_double, double
