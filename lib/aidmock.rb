@@ -41,7 +41,7 @@ module Aidmock
       interfaces[klass] = create_or_update_interface(klass, &block) if block
     end
 
-    def verify
+    def verify!
       framework.mocks.each do |mock|
         verify_double(mock)
       end
@@ -63,7 +63,7 @@ module Aidmock
       ::Aidmock::TestFrameworks::RSpec
     end
 
-    def setup
+    def setup!
       framework.extend_doubles
     end
 

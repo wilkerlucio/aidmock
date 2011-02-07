@@ -21,7 +21,7 @@
 module Aidmock
   module Sanity
     class << self
-      def sanitize
+      def sanitize!
         describe "Aidmock Sanity Checks:" do
           Aidmock.interfaces.each_pair do |klass, interface|
             context klass.to_s do

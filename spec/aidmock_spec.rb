@@ -48,7 +48,7 @@ describe Aidmock do
       Aidmock.should_receive(:verify_double).with(m2) { nil }
       Aidmock.should_receive(:verify_double).with(m3) { nil }
 
-      Aidmock.verify
+      Aidmock.verify!
     end
   end
 
