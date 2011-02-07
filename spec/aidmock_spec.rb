@@ -24,9 +24,6 @@ describe Aidmock do
   context ".interface" do
   end
 
-  context ".stub" do
-  end
-
   context ".verify" do
     it "do verify double on each double returned by framework" do
       m1 = mock; m2 = mock; m3 = mock

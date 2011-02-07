@@ -39,9 +39,6 @@ module Aidmock
       interfaces[klass] = create_or_update_interface(klass, &block)
     end
 
-    def stub(klass, stubs = {})
-    end
-
     def verify
       framework.mocks.each do |mock|
         verify_double(mock)
