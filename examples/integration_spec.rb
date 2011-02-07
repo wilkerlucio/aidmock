@@ -3,11 +3,11 @@ require 'aidmock'
 
 RSpec.configure do |config|
   config.before :all do
-    Aidmock.setup
+    Aidmock.setup!
   end
 
   config.after :each do
-    Aidmock.verify
+    Aidmock.verify!
   end
 end
 
@@ -38,7 +38,7 @@ Aidmock.interface Address do
   method :full_address, String
 end
 
-Aidmock::Sanity.sanitize
+Aidmock::Sanity.sanitize!
 
 describe Person do
   before :each do
