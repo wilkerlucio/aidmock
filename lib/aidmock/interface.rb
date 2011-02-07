@@ -31,12 +31,16 @@ module Aidmock
     end
 
     def method(name, type, *arguments)
+      @methods.delete_if { |md| md.name == name }
+
       method = MethodDescriptor.new(name, type, *arguments)
       @methods << method
       method
     end
 
     def class_method(name, type, *arguments)
+      @class_methods.delete_if { |md| md.name == name }
+
       method = MethodDescriptor.new(name, type, *arguments)
       method.class_method = true
       @class_methods << method

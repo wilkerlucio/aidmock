@@ -23,8 +23,57 @@ require File.expand_path("../../spec_helper", __FILE__)
 describe Aidmock::Interface do
   Interface = Aidmock::Interface
   MockDescriptor = Aidmock::Frameworks::MockDescriptor
+  MethodDescriptor = Aidmock::MethodDescriptor
 
-  context "finding the method" do
+  context "#method" do
+    it "add a new method" do
+      descriptor = mock "method descriptor"
+      MethodDescriptor.stub(:new).with("test", "type") { descriptor }
+
+      interface = Interface.new(Object)
+      interface.method("test", "type")
+      interface.methods.should include(descriptor)
+    end
+
+    it "remove old method if it has same name" do
+      descriptor = mock "method descriptor", :name => "test"
+      descriptor2 = mock "method descriptor"
+      MethodDescriptor.stub(:new).with("test", "type") { descriptor }
+      MethodDescriptor.stub(:new).with("test", "type2") { descriptor2 }
+
+      interface = Interface.new(Object)
+      interface.method("test", "type")
+      interface.method("test", "type2")
+      interface.methods.should include(descriptor2)
+      interface.methods.should_not include(descriptor)
+    end
+  end
+
+  context "#class_method" do
+    it "add a new method" do
+      descriptor = mock "method descriptor", :class_method= => true
+      MethodDescriptor.stub(:new).with("test", "type") { descriptor }
+
+      interface = Interface.new(Object)
+      interface.class_method("test", "type")
+      interface.class_methods.should include(descriptor)
+    end
+
+    it "remove old method if it has same name" do
+      descriptor = mock "method descriptor", :name => "test", :class_method= => true
+      descriptor2 = mock "method descriptor", :class_method= => true
+      MethodDescriptor.stub(:new).with("test", "type") { descriptor }
+      MethodDescriptor.stub(:new).with("test", "type2") { descriptor2 }
+
+      interface = Interface.new(Object)
+      interface.class_method("test", "type")
+      interface.class_method("test", "type2")
+      interface.class_methods.should include(descriptor2)
+      interface.class_methods.should_not include(descriptor)
+    end
+  end
+
+  context "#find_method" do
     it "find the method defined by exact name" do
       interface = Interface.new(Object)
       method = interface.method(:some, nil)
