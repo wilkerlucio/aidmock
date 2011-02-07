@@ -24,17 +24,17 @@ In order to use Aidmock, you need to configure it on your test environment. Sinc
 
 bc.. RSpec.configure do |config|
   config.before :all do
-    Aidmock.setup # it will do any nescessary setup, like extending your framework mocks
+    Aidmock.setup! # it will do any nescessary setup, like extending your framework mocks
   end
 
   config.after :each do
-    Aidmock.verify # it will verify created mocks after each spec
+    Aidmock.verify! # it will verify created mocks after each spec
   end
 end
 
 # load or write your interfaces here
 
-Aidmock::Sanity.sanitize # it will run sanity checks, just call it after have all interfaces defined
+Aidmock::Sanity.sanitize! # it will run sanity checks, just call it after have all interfaces defined
 
 h2. Automatic Interfacing
 
@@ -224,6 +224,15 @@ Example:
 bc. method :something, s(nil) # will accept splat with anything(nil will be converted one AnythingMatcher)
 method :something, splat(nil) # same as above
 
+h2. Mixing automatic and manual interfaces
+
+Why just manual OR automatic interfacing? You can have both!
+You can tell Aidmock to fill the interface with automatic generated methods, and them just override with manual interface, to do this, just send @:auto => true@ to interface definition:
+
+bc.. Aidmock.interface Person, :auto => true do
+  method :name, String
+end
+
 h2. Class Inheritance and Modules
 
 Aidmock respects your class inheritance and module definition, so, the below example will be valid:
@@ -247,6 +256,12 @@ it "test inheritance" do
 end
 
 h2. Changelog
+
+h3. 0.4.0
+
+* Fixed automatic generation step
+* Hability to mix automatic interfacing with manual interface
+* Methods: Aidmock.setup, Aidmock.verify, Aidmock::Sanity.sanitize now requires ! (now you should use Aidmock.setup!, Aidmock.verify!, Aidmock::Sanity.sanitize!)
 
 h3. 0.3.1
 
